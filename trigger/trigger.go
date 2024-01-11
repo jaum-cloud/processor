@@ -1,14 +1,17 @@
 package trigger
 
-type ActionFunc func(input interface{}) (output interface{}, err error)
+import (
+	"github_automation/action"
+	"time"
+)
 
 type Trigger interface {
 	Start()
-	SetAction(action ActionFunc)
+	SetActions(action ...action.Action)
 }
 
 type BaseTrigger struct {
-	actions []ActionFunc
+	Actions []action.Action
 }
 
 func NewBaseTrigger() *BaseTrigger {
@@ -17,18 +20,19 @@ func NewBaseTrigger() *BaseTrigger {
 
 func (bt *BaseTrigger) ExecuteActions(input interface{}) {
 	var err error
-	for _, action := range bt.actions {
-		input, err = action(input)
+	for _, action := range bt.Actions {
+		input, err = action.Execute(input)
 		if err != nil {
 			break
 		}
 	}
 }
 
-func (bt *BaseTrigger) SetActions(action ...ActionFunc) {
-	bt.actions = append(bt.actions, action...)
+func (bt *BaseTrigger) SetActions(actions ...action.Action) {
+	bt.Actions = actions
 }
 
 func (bt *BaseTrigger) Start() {
-	bt.ExecuteActions(nil)
+	time.Sleep(3 * time.Second)
+	// bt.ExecuteActions(nil)
 }
