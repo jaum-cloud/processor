@@ -1,0 +1,5 @@
+debug 2024/01/11 00:22:19 [common.State]: 0
+debug 2024/01/11 00:22:19 [tea.WindowSizeMsg]: {193 45}
+debug 2024/01/11 00:22:19 [textinput.initialBlinkMsg]: {}
+debug 2024/01/11 00:22:19 [common.State]: 2
+debug 2024/01/11 00:22:20 [tea.KeyMsg]: q
