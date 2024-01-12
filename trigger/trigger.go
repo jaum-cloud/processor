@@ -7,7 +7,6 @@ import (
 
 type Trigger interface {
 	Start()
-	SetActions(action ...action.Action)
 }
 
 type BaseTrigger struct {
@@ -28,11 +27,6 @@ func (bt *BaseTrigger) ExecuteActions(input interface{}) {
 	}
 }
 
-func (bt *BaseTrigger) SetActions(actions ...action.Action) {
-	bt.Actions = actions
-}
-
 func (bt *BaseTrigger) Start() {
 	time.Sleep(3 * time.Second)
-	// bt.ExecuteActions(nil)
 }

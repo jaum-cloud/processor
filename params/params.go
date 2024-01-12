@@ -5,35 +5,14 @@ import (
 	"os"
 )
 
-var paramsMap map[string]interface{}
-
-func init() {
-	// Carrega os parâmetros a partir de um arquivo JSON
-	paramsFile := os.Getenv("PARAMS_FILE")
-	data, err := os.ReadFile(paramsFile)
-	if err != nil {
-		panic(err)
-	}
-
-	paramsMap = make(map[string]interface{})
-	if err := json.Unmarshal(data, &paramsMap); err != nil {
-		panic(err)
-	}
+func NewParams(value interface{}) {
+	// Serializa os inputs em JSON
+	inputJSON, _ := json.Marshal(value)
+	os.Setenv("WORKFLOW_PARAMS", string(inputJSON))
 }
 
-// Parse preenche uma struct com os parâmetros.
-func Parse(v interface{}) error {
-	data, err := json.Marshal(paramsMap)
-	if err != nil {
-		return err
-	}
-	return json.Unmarshal(data, v)
+func Params(decode interface{}) {
+	// Serializa os inputs em JSON
+	value := os.Getenv("WORKFLOW_PARAMS")
+	json.Unmarshal([]byte(value), decode)
 }
-
-
-// Trigger
-// Run first action
-// Safe output action inside json
-
-
-

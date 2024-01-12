@@ -44,7 +44,4 @@ func (wf *WorkflowBase) Execute() {
 			break
 		}
 	}
-
-	// Aqui você pode adicionar a lógica de execução das ações
-	// e como os dados são passados entre elas
 }

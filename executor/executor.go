@@ -39,7 +39,6 @@ func ExecuteGoCode(code string) (string, error) {
 	cmd.Stderr = &stderr
 
 	if err := cmd.Run(); err != nil {
-
 		fmt.Println(err.Error())
 		return stderr.String(), err
 	}
