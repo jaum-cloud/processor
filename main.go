@@ -1,10 +1,9 @@
-// main.go
 package main
 
 import (
-	"github_automation/action"
-	"github_automation/trigger"
-	"github_automation/workflow"
+	"github.com/jaum-cloud/processor/action"
+	"github.com/jaum-cloud/processor/trigger"
+	"github.com/jaum-cloud/processor/workflow"
 )
 
 func main() {

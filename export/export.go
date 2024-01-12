@@ -1,4 +1,4 @@
-package params
+package export
 
 import (
 	"encoding/json"
@@ -6,12 +6,6 @@ import (
 
 	"github.com/jaum-cloud/processor/action"
 )
-
-func Params(decode interface{}) {
-	// Serializa os inputs em JSON
-	value := os.Getenv("WORKFLOW_PARAMS")
-	json.Unmarshal([]byte(value), decode)
-}
 
 func Export(value interface{}) {
 	// Serializa os inputs em JSON

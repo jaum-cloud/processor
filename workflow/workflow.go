@@ -1,8 +1,8 @@
 package workflow
 
 import (
-	"github_automation/action"
-	"github_automation/trigger"
+	"github.com/jaum-cloud/processor/action"
+	"github.com/jaum-cloud/processor/trigger"
 )
 
 type Workflow interface {

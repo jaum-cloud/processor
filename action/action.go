@@ -1,12 +1,11 @@
 package action
 
 import (
-	"encoding/json"
 	"fmt"
-	"github_automation/executor"
-	"github_automation/github"
 	"log"
-	"os"
+
+	"github.com/jaum-cloud/processor/executor"
+	"github.com/jaum-cloud/processor/github"
 )
 
 type Action interface {
@@ -42,16 +41,6 @@ func (ba *BaseAction) Execute(input interface{}) (output interface{}, err error)
 		ba.Output.Error = err
 		return nil, err
 	}
-
-	// Serializa os inputs em JSON
-	inputJSON, err := json.Marshal(ba.Input)
-	if err != nil {
-		log.Printf("Erro ao serializar input: %v\n", err)
-		return "", err
-	}
-
-	// Define a variável de ambiente com os inputs serializados
-	os.Setenv("GIST_INPUT", string(inputJSON))
 
 	result, err := executor.ExecuteGoCode(code)
 	if err != nil {

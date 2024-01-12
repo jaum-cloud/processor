@@ -9,17 +9,25 @@ import (
 	"time"
 )
 
-const executionTimeout = 5 * time.Second // Limite de tempo para a execução do código
-
 // ExecuteGoCode executa um código Go e retorna o resultado ou um erro.
 func ExecuteGoCode(code string) (string, error) {
-	// Salva o código em um arquivo temporário
-	tmpFile, err := os.CreateTemp("", "*.go")
+	executionTimeout := 20 * time.Second // Defina o timeout conforme necessário
+
+	// Criar um diretório temporário para o módulo
+	moduleDir, err := os.MkdirTemp("", "go-module-")
+	if err != nil {
+		return "", err
+	}
+	defer os.RemoveAll(moduleDir) // Limpar após a execução
+
+	// Criar um arquivo temporário para o código dentro do diretório do módulo
+	tmpFile, err := os.CreateTemp(moduleDir, "*.go")
 	if err != nil {
 		return "", err
 	}
 	defer os.Remove(tmpFile.Name())
 
+	// Escrever o código no arquivo temporário
 	if _, err := tmpFile.Write([]byte(code)); err != nil {
 		return "", err
 	}
@@ -27,19 +35,36 @@ func ExecuteGoCode(code string) (string, error) {
 		return "", err
 	}
 
+	cmdModInit := exec.Command("go", "mod", "init", "tempmodule")
+	cmdModInit.Dir = moduleDir // Defina o diretório de trabalho
+	if err := cmdModInit.Run(); err != nil {
+		return "", fmt.Errorf("erro ao inicializar o módulo Go: %w", err)
+	}
+
+	cmdModTidy := exec.Command("go", "mod", "tidy")
+	cmdModTidy.Dir = moduleDir // Defina o diretório de trabalho
+	if err := cmdModTidy.Run(); err != nil {
+		return "", fmt.Errorf("erro ao instalar dependencias no módulo Go: %w", err)
+	}
+
+	// // Utilizar go mod tidy para instalar dependências
+	// if err := exec.Command("go", "mod", "tidy").Run(); err != nil {
+	// 	return "", err
+	// }
+
 	// Definindo um contexto com timeout
 	ctx, cancel := context.WithTimeout(context.Background(), executionTimeout)
 	defer cancel()
 
-	// Executa o código Go com o contexto
+	// Executar o código Go com o contexto
 	cmd := exec.CommandContext(ctx, "go", "run", tmpFile.Name())
+	cmd.Dir = moduleDir // Definir o diretório do módulo como diretório de trabalho
 
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
 	if err := cmd.Run(); err != nil {
-		fmt.Println(err.Error())
 		return stderr.String(), err
 	}
 

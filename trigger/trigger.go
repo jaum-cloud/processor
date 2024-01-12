@@ -1,7 +1,7 @@
 package trigger
 
 import (
-	"github_automation/action"
+	"github.com/jaum-cloud/processor/action"
 	"time"
 )
 
@@ -28,5 +28,5 @@ func (bt *BaseTrigger) ExecuteActions(input interface{}) {
 }
 
 func (bt *BaseTrigger) Start() {
-	time.Sleep(3 * time.Second)
+	time.Sleep(1 * time.Second)
 }
