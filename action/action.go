@@ -1,7 +1,6 @@
 package action
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/jaum-cloud/processor/executor"
@@ -47,8 +46,6 @@ func (ba *BaseAction) Execute(input interface{}) (output interface{}, err error)
 		log.Printf("Erro ao serializar input: %v\n", err)
 		return nil, err
 	}
-
-	fmt.Println(result)
 
 	ba.Output.Data = result
 	return result, nil
